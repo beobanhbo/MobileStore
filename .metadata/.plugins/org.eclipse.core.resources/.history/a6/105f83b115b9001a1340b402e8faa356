@@ -1,0 +1,5 @@
+package com.example.mobilestore.exceptions;
+
+public class ResourceNotFoundException {
+
+}
