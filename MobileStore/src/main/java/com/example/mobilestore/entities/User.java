@@ -18,7 +18,16 @@ import javax.persistence.Table;
  @Column(name="name")
  private String name;
  
- @Column(name="password")
+ @Column(name="email")
+ private String email;
+ 
+ public String getEmail() {
+	return email;
+}
+public void setEmail(String email) {
+	this.email = email;
+}
+@Column(name="password")
  private String password;
  
  @Column(name="created_date")
