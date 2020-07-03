@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `gstlite` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `gstlite`;
 -- MySQL dump 10.13  Distrib 8.0.20, for Win64 (x86_64)
 --
 -- Host: localhost    Database: gstlite
@@ -28,7 +26,9 @@ CREATE TABLE `groupvariant` (
   `id` int NOT NULL AUTO_INCREMENT,
   `variantname` varchar(45) NOT NULL,
   `product_group_id` int NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `productID_idx` (`product_group_id`),
+  CONSTRAINT `id` FOREIGN KEY (`product_group_id`) REFERENCES `productgroup` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -40,6 +40,28 @@ LOCK TABLES `groupvariant` WRITE;
 /*!40000 ALTER TABLE `groupvariant` DISABLE KEYS */;
 INSERT INTO `groupvariant` VALUES (1,'New',1);
 /*!40000 ALTER TABLE `groupvariant` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `hibernate_sequence`
+--
+
+DROP TABLE IF EXISTS `hibernate_sequence`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `hibernate_sequence` (
+  `next_val` bigint DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `hibernate_sequence`
+--
+
+LOCK TABLES `hibernate_sequence` WRITE;
+/*!40000 ALTER TABLE `hibernate_sequence` DISABLE KEYS */;
+INSERT INTO `hibernate_sequence` VALUES (8);
+/*!40000 ALTER TABLE `hibernate_sequence` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -57,8 +79,7 @@ CREATE TABLE `order` (
   `comment` varchar(200) DEFAULT NULL,
   `total_price` float NOT NULL,
   `type` int NOT NULL,
-  PRIMARY KEY (`orderID`),
-  CONSTRAINT `orderID` FOREIGN KEY (`orderID`) REFERENCES `orderitem` (`orderItemID`)
+  PRIMARY KEY (`orderID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -85,7 +106,14 @@ CREATE TABLE `orderitem` (
   `orderID` int NOT NULL,
   `productID` int NOT NULL,
   `group_variant_id` int NOT NULL,
-  PRIMARY KEY (`orderItemID`)
+  PRIMARY KEY (`orderItemID`),
+  KEY `id_idx` (`group_variant_id`),
+  KEY `group_variant_id_idx` (`group_variant_id`),
+  KEY `orderID_idx` (`orderID`),
+  KEY `productID_idx` (`productID`),
+  CONSTRAINT `group_variant_id` FOREIGN KEY (`group_variant_id`) REFERENCES `groupvariant` (`id`),
+  CONSTRAINT `orderID` FOREIGN KEY (`orderID`) REFERENCES `order` (`orderID`),
+  CONSTRAINT `product` FOREIGN KEY (`productID`) REFERENCES `product` (`productID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -116,8 +144,10 @@ CREATE TABLE `product` (
   `userID` int NOT NULL,
   PRIMARY KEY (`productID`),
   KEY `userID_idx` (`userID`),
+  KEY `product_group_id_idx` (`product_group_id`),
+  CONSTRAINT `product_group_id` FOREIGN KEY (`product_group_id`) REFERENCES `productgroup` (`id`),
   CONSTRAINT `userID` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -168,7 +198,8 @@ CREATE TABLE `productimage` (
   `productID` int NOT NULL,
   `path` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`imageID`),
-  KEY `productID_idx` (`productID`)
+  KEY `productID_idx` (`productID`),
+  CONSTRAINT `productID` FOREIGN KEY (`productID`) REFERENCES `product` (`productID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -196,7 +227,7 @@ CREATE TABLE `users` (
   `password` varchar(45) NOT NULL,
   `created_date` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -205,7 +236,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Nam','nam@gmail.com','123','12/02/2020'),(2,'Cao','cao@gmail.com','123','12/02/2020');
+INSERT INTO `users` VALUES (1,'Nam','nam@gmail.com','123','12/02/2020'),(2,'Cao','cao@gmail.com','123','12/02/2020'),(5,'Beo','beo@yahoo.com','1234','2000-01-01');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -218,4 +249,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-28 16:12:49
+-- Dump completed on 2020-07-04  0:22:46
