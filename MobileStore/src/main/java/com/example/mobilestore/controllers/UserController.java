@@ -42,7 +42,6 @@ public class UserController {
 	 if (user == null) {
 	 return ResponseEntity.ok(null);
 	 }
-	
 	 return ResponseEntity.ok(user);
 	 }
 //get user by id

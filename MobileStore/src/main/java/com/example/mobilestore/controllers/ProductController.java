@@ -15,27 +15,44 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.mobilestore.entities.GroupVariant;
 import com.example.mobilestore.entities.Product;
+import com.example.mobilestore.entities.ProductGroup;
+import com.example.mobilestore.entities.ProductImage;
 import com.example.mobilestore.exceptions.ResourceNotFoundException;
+import com.example.mobilestore.repository.ProductGroupRepository;
+import com.example.mobilestore.repository.ProductImageRepository;
 import com.example.mobilestore.repository.ProductRepository;
+import com.example.mobilestore.repository.ProductVariantRepository;
 
 
 @RestController
 @RequestMapping("product")
 public class ProductController {
+	
 	@Autowired
 	private ProductRepository productRepository;
-	
+	@Autowired
+	private ProductImageRepository productImageRepository;
+	@Autowired
+	private ProductGroupRepository productGroupRepository;
+	@Autowired
+	private ProductVariantRepository productVariantRepository;
 	@GetMapping("/getlist")
 	public List<Product> getAllProduct(){
 		return productRepository.findAll();
 	}
-	@GetMapping("/getproductbyname")
-	public List<Product> getProductByName(@RequestBody Product products){
-		List<Product> product=productRepository.findByname(products.getName());
+	
+	@PostMapping("/getproductbyname")
+	public Product getProductByName(@RequestBody Product products){
+//		
+		Product product=productRepository.findByname(products.getName());
+		ProductGroup productGroup= productGroupRepository.findById(product.getProduct_group_id());
+		GroupVariant groupVariant=productVariantRepository.findById(productGroup.getId());
+		product.setGroupname(productGroup.getName());
+		product.setVariant(groupVariant.getVariantname());
 		return product;
-		
-	}
+	} 
 	//get product by product id
 	@GetMapping("/getproductbyid/{id}")
 	public ResponseEntity<Product> getProductByProductId(@PathVariable(value = "id") int productid) throws ResourceNotFoundException{
@@ -45,9 +62,15 @@ public class ProductController {
 	
 	//add new product
 	@PutMapping("/addproduct")
-	public Product addproduct(@RequestBody Product product)
+	public ProductImage addproduct(@RequestBody Product product,ProductImage productImage)
 	{
-		return productRepository.save(product);
+		productRepository.save(product);
+		Product getproduct=productRepository.findByname(product.getName());
+//		ProductImage productImage= new ProductImage();
+		
+		productImage.setProductID(getproduct.getProductID());
+		productImage.setPath(product.getPath());
+		return productImageRepository.save(productImage);
 	}
 	// delete product
 	@DeleteMapping("/product/{id}")

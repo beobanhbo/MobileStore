@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.mobilestore.entities.Product;
+import com.example.mobilestore.entities.ProductGroup;
 
-public interface ProductRepository  extends JpaRepository<Product, Integer> {
-	public Product findByname(String name);
+public interface ProductGroupRepository  extends JpaRepository<ProductGroup, Integer> {
+	public ProductGroup findById(int id);
 }
+

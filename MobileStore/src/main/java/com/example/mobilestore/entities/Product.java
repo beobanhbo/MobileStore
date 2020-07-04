@@ -42,7 +42,33 @@ public class Product {
 	 @Column(name="quantity")
 	 private int quantity;
 
-	 public int getQuantity() {
+	 private  String groupname;
+	 private  String variant;
+	 private String path;
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+	 public String getVariant() {
+		return variant;
+	}
+
+	public void setVariant(String variant) {
+		this.variant = variant;
+	}
+
+	public String getGroupname() {
+		return groupname;
+	}
+
+	public void setGroupname(String groupname) {
+		this.groupname = groupname;
+	}
+
+	public int getQuantity() {
 		return quantity;
 	}
 
