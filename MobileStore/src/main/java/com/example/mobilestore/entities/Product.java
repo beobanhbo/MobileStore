@@ -1,11 +1,18 @@
 package com.example.mobilestore.entities;
 
+
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 @Entity
 @Table(name="product")
 public class Product {
@@ -31,6 +38,29 @@ public class Product {
 	 
 	 @Column(name="userID")
 	 private int userID;
+	 
+	 @Column(name="quantity")
+	 private int quantity;
+
+	 public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	@OneToMany(targetEntity = ProductImage.class,cascade = CascadeType.ALL)
+	 @JoinColumn(name="productID",referencedColumnName = "productID")
+	 private List<ProductImage> productImages;
+	 
+	public List<ProductImage> getProductImages() {
+		return productImages;
+	}
+
+	public void setProductImages(List<ProductImage> productImages) {
+		this.productImages = productImages;
+	}
 
 	public int getProductID() {
 		return productID;
