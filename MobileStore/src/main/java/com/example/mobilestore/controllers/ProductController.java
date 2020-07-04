@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ import com.example.mobilestore.repository.ProductVariantRepository;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RequestMapping("product")
 public class ProductController {
 	
@@ -61,9 +63,10 @@ public class ProductController {
 	}
 	
 	//add new product
-	@PutMapping("/addproduct")
+	@PostMapping("/addproduct")
 	public ProductImage addproduct(@RequestBody Product product,ProductImage productImage)
 	{
+//		System.out.println(productImage);
 		productRepository.save(product);
 		Product getproduct=productRepository.findByname(product.getName());
 //		ProductImage productImage= new ProductImage();
