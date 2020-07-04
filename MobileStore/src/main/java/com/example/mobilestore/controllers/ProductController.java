@@ -61,7 +61,7 @@ public class ProductController {
 	}
 	
 	//add new product
-	@PutMapping("/addproduct")
+	@PostMapping("/addproduct")
 	public ProductImage addproduct(@RequestBody Product product,ProductImage productImage)
 	{
 		productRepository.save(product);
